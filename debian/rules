@@ -1,4 +1,80 @@
 #!/usr/bin/make -f
 
+# See debhelper(7) (uncomment to enable).
+# Output every command that modifies files on the build system.
+# export DH_VERBOSE = 1
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+DPKG_EXPORT_BUILDFLAGS = 1
+include /usr/share/dpkg/buildflags.mk
+CXXFLAGS+=$(CPPFLAGS)
+
+DEBIANDIR = $(shell pwd)/debian
+
 %:
 	dh $@
+
+override_dh_auto_configure-arch:
+	dh_auto_configure -a -- -D TF_BUILD_EXAMPLES=OFF \
+	    -D TF_BUILD_TESTS=OFF -D TF_BUILD_PROFILER=ON
+
+override_dh_auto_configure-indep:
+
+execute_after_dh_auto_build-arch:
+	# The profiler needs local copies of these libraries; it cannot
+	# use symlinks
+	mkdir -p tfprof/css/bootstrap/4.4.1
+	cp /usr/share/nodejs/bootstrap/dist/css/bootstrap.min.css tfprof/css/bootstrap/4.4.1/bootstrap.min.css
+	mkdir -p tfprof/js/bootstrap/4.4.1
+	cp /usr/share/nodejs/bootstrap/dist/js/bootstrap.bundle.min.js* tfprof/js/bootstrap/4.4.1
+	mkdir -p tfprof/js/jquery/3.4.1
+	cp /usr/share/javascript/jquery/jquery.min.js tfprof/js/jquery/3.4.1/jquery.min.js
+	mkdir -p tfprof/js/d3
+	cp /usr/share/nodejs/d3/dist/d3.min.js tfprof/js/d3/d3.v5.min.js
+	cp /usr/share/javascript/d3-tip/d3-tip.min.js tfprof/js/d3/d3-tip.min.js
+
+override_dh_auto_build-indep:
+	: # Dummy to force the target to always be run
+ifeq (,$(findstring nodoc,$(DEB_BUILD_OPTIONS)))
+	# a continuation of override_dh_auto_build-indep: build documentation
+	cd mcss/documentation && ./doxygen.py ../../doxygen/conf.py
+	cp debian/source-fonts.css docs
+	mkdir docs/fonts
+	for font in \
+	    Source_Code_Pro/static/SourceCodePro-Italic.ttf \
+	    Source_Code_Pro/static/SourceCodePro-Regular.ttf \
+	    Source_Code_Pro/static/SourceCodePro-SemiBold.ttf \
+	    Source_Sans_Pro/SourceSansPro-Regular.ttf \
+	    Source_Sans_Pro/SourceSansPro-SemiboldItalic.ttf \
+	    Source_Sans_Pro/SourceSansPro-Semibold.ttf \
+	    Source_Sans_Pro/SourceSansPro-Italic.ttf; do \
+	    cp source-fonts/$$font docs/fonts; \
+	done
+	perl -i -pe 's$$\Qhref="https://fonts.googleapis.com/css?family=source+sans+pro:400,400i,600,600i%7csource+code+pro:400,400i,600"\E$$href="source-fonts.css"$$i' docs/*.html
+	perl -i -pe "s% ((?:body)?file)=\"\Q$$(pwd)\E% $$1=\"/usr/include%g; s% external=\"\Q$$(pwd)\E/doxygen/% external=\"%g;" docs/xml/*.xml
+endif
+
+override_dh_compress-indep:
+	# These are all referred to by HTML pages in the documentation,
+	# so should not be compressed
+	dh_compress -X.dot -X.pdf -X.xml -X.xsd -X.ttf
+
+override_dh_auto_test-arch:
+	: # Dummy to force the target to alway be run
+ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
+	mkdir -p buildtest
+	cd buildtest && cmake ../ -D TF_BUILD_EXAMPLES=OFF \
+	    -D TF_BUILD_PROFILER=OFF -D TF_BUILD_TESTS=ON
+	cd buildtest && make
+	cd buildtest && make test || \
+	    make test ARGS="--rerun-failed --output-on-failure"
+endif
+
+override_dh_auto_test-indep:
+
+execute_before_dh_clean:
+	rm -rf mcss/documentation/__pycache__ mcss/plugins/__pycache__
+	rm -rf doxygen/__pycache__
+	rm -rf buildtest
+	rm -rf docs
+	rm -rf tfprof/css/bootstrap tfprof/js/bootstrap tfprof/js/jquery tfprof/js/d3

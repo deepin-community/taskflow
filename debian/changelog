@@ -1,5 +1,57 @@
-template-repository (1.0-1) unstable; urgency=medium
+taskflow (3.7.0+ds-3) unstable; urgency=medium
 
-  * Initial release
+  * Fix autopkgtest to use libatomic on armel
 
- -- Tsic404 <liuheng@deepin.org>  Sat, 28 Jan 2023 13:46:49 +0800
+ -- Julian Gilbey <jdg@debian.org>  Thu, 04 Jul 2024 21:03:18 +0100
+
+taskflow (3.7.0+ds-2) unstable; urgency=medium
+
+  * Fix tests on archs where size_t is only 32 bits
+
+ -- Julian Gilbey <jdg@debian.org>  Tue, 02 Jul 2024 13:57:42 +0100
+
+taskflow (3.7.0+ds-1) unstable; urgency=medium
+
+  * New upstream version
+  * Add Multi-Arch hints
+
+ -- Julian Gilbey <jdg@debian.org>  Mon, 01 Jul 2024 21:57:30 +0100
+
+taskflow (3.6.0+ds-6) unstable; urgency=medium
+
+  * Make libtaskflow-cpp-dev an arch-any package, as the CMake files
+    record whether the machine is 32 or 64 bit
+  * Improve the build system correspondingly
+
+ -- Julian Gilbey <jdg@debian.org>  Mon, 22 Apr 2024 10:16:09 +0100
+
+taskflow (3.6.0+ds-5) unstable; urgency=medium
+
+  * Remove ${ATOMIC_LIBRARY} from autopkgtest call; it should not be
+    necessary (and is not defined anywhere)
+
+ -- Julian Gilbey <jdg@debian.org>  Sun, 21 Apr 2024 20:07:03 +0100
+
+taskflow (3.6.0+ds-4) unstable; urgency=medium
+
+  * Check for correct flags for libatomic to fix build failure on armel
+
+ -- Julian Gilbey <jdg@debian.org>  Sun, 21 Apr 2024 17:57:40 +0100
+
+taskflow (3.6.0+ds-3) unstable; urgency=medium
+
+  * Fix arch-indep build-deps
+
+ -- Julian Gilbey <jdg@debian.org>  Fri, 19 Apr 2024 07:11:30 +0100
+
+taskflow (3.6.0+ds-2) unstable; urgency=medium
+
+  * Source-only upload.
+
+ -- Julian Gilbey <jdg@debian.org>  Thu, 18 Apr 2024 20:02:18 +0100
+
+taskflow (3.6.0+ds-1) unstable; urgency=medium
+
+  * Initial release. (Closes: #1064473)
+
+ -- Julian Gilbey <jdg@debian.org>  Wed, 06 Mar 2024 08:46:23 +0000

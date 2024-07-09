@@ -1,0 +1,6 @@
+Tests: taskflow-tests
+Depends: cmake,
+         doctest-dev,
+         g++,
+         libtaskflow-cpp-dev
+Restrictions: allow-stderr

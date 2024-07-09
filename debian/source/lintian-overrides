@@ -1,0 +1,13 @@
+# This is a false positive
+taskflow source: source-is-missing [mcss/documentation/search.js]
+taskflow source: source-contains-prebuilt-javascript-object [mcss/documentation/search.js]
+
+# These are false positives; these templates are hand-written
+taskflow source: source-is-missing [mcss/documentation/templates/doxygen/*.html]
+taskflow source: source-is-missing [mcss/documentation/templates/python/*.html]
+taskflow source: source-is-missing [mcss/pelican-theme/templates/article_footer.html]
+
+# These test files are generated from the sources in the same directories
+taskflow source: source-is-missing [mcss/documentation/test_doxygen/*/*.html]
+taskflow source: source-is-missing [mcss/documentation/test_python/*/*.html]
+taskflow source: source-is-missing [mcss/plugins/m/test/*/*.html]

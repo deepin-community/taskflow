@@ -1,0 +1,8 @@
+taskflow profiler (tfprof) for Debian
+-------------------------------------
+
+The tfprof server stores its static files in /usr/share/taskflow.  The
+program has been modified so that the --mount option defaults to this
+location and does not need to be specified explicitly.
+
+ -- Julian Gilbey <jdg@debian.org>, Thu, 22 Feb 2024 21:02:57 +0000
