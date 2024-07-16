@@ -1,0 +1,15 @@
+Description: Install the tfprof executable
+ This is needed for the Debian build so that it can be packaged.
+Forwarded: not-needed
+Author: Julian Gilbey <jdg@debian.org>
+Last-Update: 2024-04-22
+
+--- a/tfprof/server/CMakeLists.txt
++++ b/tfprof/server/CMakeLists.txt
+@@ -4,3 +4,6 @@
+ target_link_libraries(
+   tfprof ${PROJECT_NAME} ${ATOMIC_LIBRARY} tf::default_settings cpp-httplib spdlog fmt
+ )
++
++include(GNUInstallDirs)
++install(TARGETS tfprof)

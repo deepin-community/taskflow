@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+
+cp -r unittests "$AUTOPKGTEST_TMP"
+cp debian/tests/CMakeLists.txt "$AUTOPKGTEST_TMP"/unittests
+mkdir "$AUTOPKGTEST_TMP"/build
+cd "$AUTOPKGTEST_TMP"/build
+CXX=g++ cmake ../unittests
+make
+make test || make test ARGS="--rerun-failed --output-on-fail"

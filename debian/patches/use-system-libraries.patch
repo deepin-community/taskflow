@@ -1,0 +1,47 @@
+Description: We do not use vendored libraries in the Debian build
+Forwarded: not-needed
+Author: Julian Gilbey <jdg@debian.org>
+Last-Update: 2024-02-25
+
+--- a/tfprof/server/CMakeLists.txt
++++ b/tfprof/server/CMakeLists.txt
+@@ -2,7 +2,5 @@
+ add_executable(tfprof tfprof.cpp)
+ 
+ target_link_libraries(
+-  tfprof ${PROJECT_NAME} tf::default_settings
++  tfprof ${PROJECT_NAME} tf::default_settings cpp-httplib spdlog fmt
+ )
+-
+-target_include_directories(tfprof PRIVATE ${TF_3RD_PARTY_DIR})
+--- a/unittests/CMakeLists.txt
++++ b/unittests/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ enable_testing()
+ 
+-include(${TF_3RD_PARTY_DIR}/doctest/doctest.cmake)
++include(/usr/lib/cmake/doctest/doctest.cmake)
+ 
+ list(APPEND TF_UNITTESTS 
+   test_utility 
+@@ -43,7 +43,7 @@
+ foreach(unittest IN LISTS TF_UNITTESTS)
+   add_executable(${unittest} ${unittest}.cpp)
+   target_link_libraries(${unittest} ${PROJECT_NAME} tf::default_settings)
+-  target_include_directories(${unittest} PRIVATE ${TF_3RD_PARTY_DIR}/doctest)
++  target_include_directories(${unittest} PRIVATE /usr/lib/cmake/doctest /usr/include/doctest)
+   doctest_discover_tests(${unittest})
+ endforeach()
+ 
+--- a/tfprof/server/tfprof.cpp
++++ b/tfprof/server/tfprof.cpp
+@@ -1,7 +1,7 @@
+ // 3rd-party include
+ 
+-#include <httplib/httplib.hpp>
+-#include <CLI11/CLI11.hpp>
++#include <httplib.h>
++#include <CLI/CLI.hpp>
+ #include <nlohmann/json.hpp>
+ #include <spdlog/spdlog.h>
+ 
