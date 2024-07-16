@@ -1,0 +1,20 @@
+Description: Use default location for tfprof template files on Debian systems
+  Upstream cannot assume a default location, so we do not forward this patch
+Forwarded: not-needed
+Author: Julian Gilbey <jdg@debian.org>
+Last-Update: 2024-02-25
+
+--- a/tfprof/server/tfprof.cpp
++++ b/tfprof/server/tfprof.cpp
+@@ -534,9 +534,8 @@
+   app.add_option("-i,--input", input, "input profiling file")
+      ->required();
+ 
+-  std::string mount;
+-  app.add_option("-m,--mount", mount, "mount path to index.html")
+-     ->required();
++  std::string mount = "/usr/share/taskflow";
++  app.add_option("-m,--mount", mount, "mount path to index.html");
+ 
+   CLI11_PARSE(app, argc, argv);
+ 

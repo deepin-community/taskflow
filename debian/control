@@ -1,15 +1,70 @@
-Source: template-repository
-Section: unknown
+Source: taskflow
+Section: libs
 Priority: optional
-Maintainer: Tsic404 <liuheng@deepin.org>
-Build-Depends: debhelper (>= 11)
-Standards-Version: 4.1.3
-Homepage: https://github.com/deepin-community/template-repository
-#Vcs-Browser: https://salsa.debian.org/debian/deepin-community-template-repository
-#Vcs-Git: https://salsa.debian.org/debian/deepin-community-template-repository.git
+Maintainer: Julian Gilbey <jdg@debian.org>
+Uploaders: Debian Python Team <team+python@tracker.debian.org>
+Rules-Requires-Root: no
+Build-Depends: cmake,
+               debhelper-compat (= 13)
+Build-Depends-Arch: doctest-dev <!nocheck>,
+                    libcli11-dev,
+                    libcpp-httplib-dev,
+                    libjs-bootstrap4,
+                    libjs-d3-tip,
+                    libjs-jquery,
+                    libspdlog-dev,
+                    nlohmann-json3-dev,
+                    node-d3
+Build-Depends-Indep: doxygen <!nodoc>,
+                     graphviz <!nodoc>,
+                     python3-jinja2 <!nodoc>,
+                     python3-pygments <!nodoc>
+Standards-Version: 4.7.0
+Homepage: https://taskflow.github.io/
+Vcs-Browser: https://salsa.debian.org/debian/taskflow
+Vcs-Git: https://salsa.debian.org/debian/taskflow.git
+Description: Parallel and Heterogeneous Task Programming System for C++
+ Taskflow helps you quickly write parallel and heterogeneous task
+ programs with high performance and simultaneous high productivity. It
+ is faster, more expressive, with fewer lines of code, and easier for
+ drop-in integration than many of existing task programming libraries.
+ It is provided as a collection of C++ header files, using C++17.
 
-Package: template-repository
+Package: libtaskflow-cpp-dev
+Section: libdevel
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
+Multi-Arch: same
+Depends: ${misc:Depends}
+Suggests: taskflow-doc,
+          taskflow-profiler
+Description: ${source:Synopsis} (header files)
+ ${source:Extended-Description}
+ .
+ This package provides the C++ header files for Taskflow.
+
+Package: taskflow-profiler
+Section: libdevel
+Architecture: any
+Multi-Arch: foreign
+Depends: ${misc:Depends},
+         ${shlibs:Depends}
+Recommends: libtaskflow-cpp-dev
+Suggests: taskflow-doc
+Description: ${source:Synopsis} (profiler)
+ ${source:Extended-Description}
+ .
+ This package provides the Taskflow profiler, "tfprof", together with the
+ profiler server.
+
+Package: taskflow-doc
+Section: doc
+Architecture: all
+Multi-Arch: foreign
+Depends: ${misc:Depends}
+Suggests: libtaskflow-cpp-dev,
+          taskflow-profiler
+Description: ${source:Synopsis} (documentation)
+ ${source:Extended-Description}
+ .
+ This package provides the documentation for Taskflow.
+Build-Profiles: <!nodoc>

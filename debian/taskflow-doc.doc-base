@@ -1,0 +1,10 @@
+Document: taskflow
+Title: Taskflow Manual
+Author: Dr. Tsung-Wei Huang <twh760812@gmail.com>
+Abstract: This manual describes the Taskflow library
+ for parallel and heterogeneous task programming in C++
+Section: Programming/C++
+
+Format: HTML
+Index: /usr/share/doc/taskflow-doc/html/index.html
+Files: /usr/share/doc/taskflow-doc/html/*.html
